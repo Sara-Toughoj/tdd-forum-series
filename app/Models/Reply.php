@@ -9,6 +9,8 @@ class Reply extends Model
 {
     use HasFactory;
 
+    protected $fillable = ['body', 'user_id', 'thread_id'];
+
     //-------------------------- Relationship --------------------------
     public function owner()
     {

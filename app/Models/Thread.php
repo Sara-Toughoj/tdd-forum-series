@@ -9,16 +9,29 @@ class Thread extends Model
 {
     use HasFactory;
 
+    protected $fillable = ['body', 'user_id'];
+
     //-------------------------------------  Tools  -------------------------------------
     public function path()
     {
         return '/threads/' . $this->id;
     }
 
-    //-------------------------------------  Tools  -------------------------------------
+
+    public function addReply($reply)
+    {
+        $this->replies()->create($reply);
+    }
+
+    //-------------------------------------  Relationships  -------------------------------------
 
     public function replies()
     {
         return $this->hasMany(Reply::class);
+    }
+
+    public function creator()
+    {
+        return $this->belongsTo(User::class, 'user_id');
     }
 }
