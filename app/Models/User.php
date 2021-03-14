@@ -48,4 +48,10 @@ class User extends Authenticatable
     {
         return $this->hasMany(Reply::class);
     }
+
+    public function threads()
+    {
+        return $this->hasMany(Thread::class);
+    }
+
 }
