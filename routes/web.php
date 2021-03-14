@@ -27,7 +27,7 @@ Route::get('/threads', [ThreadsController::class, 'index']);
 Route::get('/threads/{thread}', [ThreadsController::class, 'show']);
 
 Route::middleware('auth')->group(function () {
-    Route::post('/threads/{thread}/replies', [RepliesController::class, 'store']);
+    Route::post('/threads/{thread}/replies', [RepliesController::class, 'store'])->name('replies.store');
 });
 
 
