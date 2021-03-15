@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\RepliesController;
 use App\Http\Controllers\ThreadsController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*

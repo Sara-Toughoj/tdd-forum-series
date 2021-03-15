@@ -33,8 +33,8 @@ class ThreadTest extends TestCase
     /** @test */
     public function a_thread_can_add_reply()
     {
-        $thread = Thread::factory()->create();
-        $user = User::factory()->create();
+        $thread = create(Thread::class);
+        $user = create(User::class);
 
         $this->assertCount(0, $thread->replies);
 
@@ -46,8 +46,5 @@ class ThreadTest extends TestCase
         $thread->refresh();
 
         $this->assertCount(1, $thread->replies);
-
     }
-
-
 }
