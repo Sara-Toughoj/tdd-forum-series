@@ -13,10 +13,19 @@ class CreateThreadsTest extends TestCase
 {
     use RefreshDatabase, WithFaker;
 
+
+    /** @test */
+    public function guests_may_not_see_create_thread_page()
+    {
+        $this->expectException(AuthenticationException::class);
+        $this->get('/threads/create')
+            ->assertRedirect('login');
+    }
+
+
     /** @test */
     public function guests_may_not_add_threads()
     {
-        $this->withoutExceptionHandling();
         $this->expectException(AuthenticationException::class);
         $thread = make(Thread::class);
         $this->post('threads', $thread->toArray());
@@ -33,6 +42,5 @@ class CreateThreadsTest extends TestCase
         $this->get($thread->path())
             ->assertSee($thread->body)
             ->assertSee($thread->title);
-
     }
 }

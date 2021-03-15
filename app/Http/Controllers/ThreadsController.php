@@ -3,14 +3,21 @@
 namespace App\Http\Controllers;
 
 use App\Models\Thread;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Routing\Redirector;
+use Illuminate\Validation\ValidationException;
 
 class ThreadsController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     * @return Application|Factory|View
      */
     public function index()
     {
@@ -21,18 +28,19 @@ class ThreadsController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Application|Factory|View
      */
     public function create()
     {
-        //
+        return view('threads.create');
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     * @param Request $request
+     * @return Application|RedirectResponse|Redirector
+     * @throws ValidationException
      */
     public function store(Request $request)
     {
@@ -53,8 +61,8 @@ class ThreadsController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param \App\Models\Thread $thread
-     * @return \Illuminate\Http\Response
+     * @param Thread $thread
+     * @return Application|Factory|View
      */
     public function show(Thread $thread)
     {
@@ -64,8 +72,8 @@ class ThreadsController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param \App\Models\Thread $thread
-     * @return \Illuminate\Http\Response
+     * @param Thread $thread
+     * @return Response
      */
     public function edit(Thread $thread)
     {
@@ -75,9 +83,9 @@ class ThreadsController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
-     * @param \App\Models\Thread $thread
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @param Thread $thread
+     * @return Response
      */
     public function update(Request $request, Thread $thread)
     {
@@ -87,8 +95,8 @@ class ThreadsController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param \App\Models\Thread $thread
-     * @return \Illuminate\Http\Response
+     * @param Thread $thread
+     * @return Response
      */
     public function destroy(Thread $thread)
     {
