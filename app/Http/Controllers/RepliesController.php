@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 
 class RepliesController extends Controller
 {
-    public function store(Thread $thread)
+    public function store($channelSlug, Thread $thread)
     {
         $this->validate(request(), [
             'body' => 'required'

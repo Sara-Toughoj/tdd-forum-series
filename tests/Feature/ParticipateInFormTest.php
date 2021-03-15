@@ -16,8 +16,10 @@ class ParticipateInFormTest extends TestCase
     /** @test */
     public function unauthenticated_users_may_not_add_replies()
     {
+        $thread = create(Thread::class);
         $this->expectException('Illuminate\Auth\AuthenticationException');
-        $this->post("threads/1/replies");
+        $this->post("{$thread->path()}/replies")
+            ->assertRedirect('login');
     }
 
     /** @test */
@@ -26,7 +28,7 @@ class ParticipateInFormTest extends TestCase
         $this->signIn($user = create(User::class));
         $thread = create(Thread::class);
 
-        $this->post("threads/$thread->id/replies", [
+        $this->post($thread->path() . '/replies', [
             'body' => $body = $this->faker->paragraph,
         ]);
 

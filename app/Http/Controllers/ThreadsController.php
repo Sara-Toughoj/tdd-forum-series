@@ -47,12 +47,14 @@ class ThreadsController extends Controller
         $this->validate($request, [
             'title' => 'required',
             'body' => 'required',
+            'channel_id' => 'exists:channels,id'
         ]);
 
         $thread = Thread::create([
             'title' => $request->title,
             'body' => $request->body,
             'user_id' => auth()->id(),
+            'channel_id' => request()->channel_id
         ]);
 
         return redirect($thread->path());
@@ -62,9 +64,10 @@ class ThreadsController extends Controller
      * Display the specified resource.
      *
      * @param Thread $thread
+     * @param $channelSlug
      * @return Application|Factory|View
      */
-    public function show(Thread $thread)
+    public function show($channelSlug ,Thread $thread)
     {
         return view('threads.show', compact('thread'));
     }

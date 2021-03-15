@@ -9,12 +9,12 @@ class Thread extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['body', 'title', 'user_id'];
+    protected $fillable = ['body', 'title', 'user_id', 'channel_id'];
 
     //-------------------------------------  Tools  -------------------------------------
     public function path()
     {
-        return '/threads/' . $this->id;
+        return "/threads/{$this->channel->slug}/{$this->id}";
     }
 
 
@@ -33,5 +33,10 @@ class Thread extends Model
     public function creator()
     {
         return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function channel()
+    {
+        return $this->belongsTo(Channel::class);
     }
 }
