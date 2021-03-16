@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\Reply;
 use App\Models\Thread;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -38,5 +39,16 @@ class ParticipateInFormTest extends TestCase
         $this->assertEquals($new_reply->owner->id, $user->id);
 
         $this->get($thread->path())->assertSee($new_reply->body);
+    }
+
+    /** @test */
+    public function a_reply_requires_a_body()
+    {
+        $this->withExceptionHandling()->signIn();
+        $thread = create(Thread::class);
+        $reply = make(Reply::class, ['body' => null]);
+
+        $this->post($thread->path() . '/replies', $reply->toArray())
+            ->assertSessionHasErrors('body');
     }
 }

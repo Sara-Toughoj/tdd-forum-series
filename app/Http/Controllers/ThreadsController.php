@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Channel;
 use App\Models\Thread;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -47,7 +48,7 @@ class ThreadsController extends Controller
         $this->validate($request, [
             'title' => 'required',
             'body' => 'required',
-            'channel_id' => 'exists:channels,id'
+            'channel_id' => 'exists:' . (new Channel())->getTable() . ',id'
         ]);
 
         $thread = Thread::create([
@@ -67,7 +68,7 @@ class ThreadsController extends Controller
      * @param $channelSlug
      * @return Application|Factory|View
      */
-    public function show($channelSlug ,Thread $thread)
+    public function show($channelSlug, Thread $thread)
     {
         return view('threads.show', compact('thread'));
     }
