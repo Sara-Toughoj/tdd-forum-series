@@ -38,7 +38,8 @@ class ThreadsController extends Controller
      */
     public function create()
     {
-        return view('threads.create');
+        $channels = Channel::all();
+        return view('threads.create' , compact('channels'));
     }
 
     /**
@@ -50,10 +51,11 @@ class ThreadsController extends Controller
      */
     public function store(Request $request)
     {
+
         $this->validate($request, [
             'title' => 'required',
             'body' => 'required',
-            'channel_id' => 'exists:' . (new Channel())->getTable() . ',id'
+            'channel_id' => 'required|exists:' . (new Channel())->getTable() . ',id'
         ]);
 
         $thread = Thread::create([
