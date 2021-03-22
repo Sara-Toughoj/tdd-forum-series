@@ -11,6 +11,8 @@ class Thread extends Model
 
     protected $fillable = ['body', 'title', 'user_id', 'channel_id'];
 
+    protected $withCount = ['replies'];
+
     //-------------------------------------  Tools  -------------------------------------
     public function path()
     {
@@ -44,4 +46,5 @@ class Thread extends Model
     {
         return $this->belongsTo(Channel::class);
     }
+
 }
