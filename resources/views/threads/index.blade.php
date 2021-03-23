@@ -15,9 +15,18 @@
                         @endif
 
                         @foreach($threads as $thread)
-                            <a href="{{$thread->path()}}">
-                                <h4> {{$thread->title}} </h4>
-                            </a>
+                            <div class="level">
+                                <h4 class="flex">
+                                    <a href="{{$thread->path()}}">
+                                        {{$thread->title}}
+                                    </a>
+                                </h4>
+
+                                <a href="{{$thread->path()}}">
+                                    <strong> {{$thread->replies_count}} {{Str::plural('reply', $thread->replies_count)}}</strong>
+                                </a>
+                            </div>
+
                             <div>
                                 {{$thread->body}}
                             </div>

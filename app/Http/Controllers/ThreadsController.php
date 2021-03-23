@@ -8,6 +8,7 @@ use App\Models\Thread;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -25,13 +26,13 @@ class ThreadsController extends Controller
      */
     public function index(Channel $channel, ThreadFilters $filters)
     {
-        $threads = Thread::latest()->filter($filters);
+        $threads = $this->getThreads($filters, $channel);
 
-        if ($channel->exists) {
-            $threads = $channel->threads()->latest();
+        if (request()->wantsJson()) {
+            return $threads;
         }
 
-        $threads = $threads->get();
+
         return view('threads.index', compact('threads'));
     }
 
@@ -82,7 +83,7 @@ class ThreadsController extends Controller
     {
         return view('threads.show', [
             'thread' => $thread,
-            'replies' => $thread->replies()->paginate(1)
+            'replies' => $thread->replies()->paginate(25)
         ]);
     }
 
@@ -118,5 +119,21 @@ class ThreadsController extends Controller
     public function destroy(Thread $thread)
     {
         //
+    }
+
+    /**
+     * @param ThreadFilters $filters
+     * @param Channel $channel
+     * @return Collection
+     */
+    protected function getThreads(ThreadFilters $filters, Channel $channel)
+    {
+        $threads = Thread::latest()->filter($filters);
+
+        if ($channel->exists) {
+            $threads = $channel->threads()->latest();
+        }
+
+        return $threads->get();
     }
 }
