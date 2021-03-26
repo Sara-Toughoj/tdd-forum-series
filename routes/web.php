@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\FavoritesController;
+use App\Http\Controllers\ProfilesController;
 use App\Http\Controllers\RepliesController;
 use App\Http\Controllers\ThreadsController;
 use Illuminate\Support\Facades\Auth;
@@ -34,6 +35,7 @@ Route::middleware('auth')->group(function () {
 Route::get('/threads', [ThreadsController::class, 'index']);
 Route::get('/threads/{channelSlug}/{thread}', [ThreadsController::class, 'show']);
 Route::get('/threads/{channel}', [ThreadsController::class, 'index']);
+Route::get('/profiles/{user}', [ProfilesController::class, 'show'])->name('profile');
 
 
 
