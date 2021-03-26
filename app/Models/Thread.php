@@ -13,6 +13,20 @@ class Thread extends Model
 
     protected $withCount = ['replies'];
 
+    protected $with = ['channel'];
+
+
+    //-------------------------------------  Global Scopes  -------------------------------------
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::addGlobalScope('creator', function ($builder) {
+            return $builder->with('creator');
+        });
+    }
+
     //-------------------------------------  Tools  -------------------------------------
     public function path()
     {
