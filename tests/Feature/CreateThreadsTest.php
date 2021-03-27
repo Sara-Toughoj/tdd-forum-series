@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\Channel;
+use App\Models\Reply;
 use App\Models\Thread;
 use App\Models\User;
 use Illuminate\Auth\AuthenticationException;
@@ -64,6 +65,44 @@ class CreateThreadsTest extends TestCase
 
         $this->publishAThread(['channel_id' => 999])
             ->assertSessionHasErrors('channel_id');
+    }
+
+    /** @test */
+    public function guests_can_not_delete_threads()
+    {
+        $thread = create(Thread::class);
+        $this->withExceptionHandling();
+
+        $this->delete($thread->path())
+            ->assertRedirect('/login');
+
+        $this->assertDatabaseHas((new Thread())->getTable(), ['id' => $thread->id]);
+
+    }
+
+    /** @test */
+    public function a_thread_can_be_deleted()
+    {
+        $this->signIn();
+        $thread = create(Thread::class);
+        $reply = create(Reply::class, ['thread_id' => $thread->id]);
+
+        $this->assertDatabaseHas((new Thread())->getTable(), ['id' => $thread->id]);
+        $this->assertDatabaseHas((new Reply())->getTable(), ['id' => $reply->id]);
+
+        $this->deleteJson($thread->path())
+            ->assertStatus(204);
+
+        $this->assertDatabaseMissing((new Thread())->getTable(), ['id' => $thread->id]);
+        $this->assertDatabaseMissing((new Reply())->getTable(), ['id' => $reply->id]);
+
+    }
+
+
+    /** @test */
+    public function threads_may_only_be_deleted_by_those_how_have_permission()
+    {
+
     }
 
     protected function publishAThread($overrides)
