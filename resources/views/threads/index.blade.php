@@ -9,7 +9,7 @@
                 </div>
             @endif
             <div class="col-md-8">
-                @foreach($threads as $thread)
+                @forelse($threads as $thread)
                     <div class="card mt-3">
                         <div class="card-header">
                             <div class="level">
@@ -32,7 +32,11 @@
                             <hr>
                         </div>
                     </div>
-                @endforeach()
+                @empty
+                    <h5>
+                        There are no relevant results at this time.
+                    </h5>
+                @endforelse()
             </div>
         </div>
     </div>
