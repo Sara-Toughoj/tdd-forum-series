@@ -2,12 +2,13 @@
 
 namespace App\Models;
 
+use App\RecordsActivity;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Thread extends Model
 {
-    use HasFactory;
+    use HasFactory, RecordsActivity;
 
     protected $fillable = ['body', 'title', 'user_id', 'channel_id'];
 
@@ -47,6 +48,7 @@ class Thread extends Model
         return $filters->apply($query);
     }
 
+
     //-------------------------------------  Relationships  -------------------------------------
 
     public function replies()
@@ -66,5 +68,6 @@ class Thread extends Model
     {
         return $this->belongsTo(Channel::class);
     }
+
 
 }
