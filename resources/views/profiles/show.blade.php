@@ -7,38 +7,21 @@
                 <div class="page-header">
                     <h1>
                         {{$profileUser->name}}
-                        <small> Since {{$profileUser->created_at->diffForHumans()}} </small>
                     </h1>
                 </div>
 
-                @foreach($threads as $thread)
-                    <div class="card mt-3">
-                        <div class="card-header">
-                            <div class="level">
-                        <span class="flex">
-                            <a href="{{route('profile',$thread->creator)}}"> {{$thread->creator->name}}</a>
-                            posted:
-                            <a href="{{$thread->path()}}">
-                            {{$thread->title}}
-                            </a>
-                        </span>
-                                <span>
-                            {{$thread->created_at->diffForHumans()}}
-                        </span>
-                            </div>
-                        </div>
-
-                        <div class="card-body">
-                            <article>
-                                {{$thread->body}}
-                            </article>
-                        </div>
+                @foreach($activities as $activities_date =>$activity_group)
+                    <h4 class="mt-4">
+                        {{$activities_date}}
+                    </h4>
+                    <hr/>
+                    @foreach($activity_group as $activity)
+                        @include("profiles.activities.$activity->type")
+                    @endforeach
+                    <div class="mt-3">
+                        {{--                    {{$threads->links("pagination::bootstrap-4")}}--}}
                     </div>
                 @endforeach
-                <div class="mt-3">
-                    {{$threads->links("pagination::bootstrap-4")}}
-                </div>
-
             </div>
         </div>
     </div>

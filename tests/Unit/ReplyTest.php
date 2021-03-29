@@ -4,6 +4,7 @@ namespace Tests\Unit;
 
 use App\Models\Favorite;
 use App\Models\Reply;
+use App\Models\Thread;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -39,5 +40,13 @@ class ReplyTest extends TestCase
         $reply->favorite();
 
         $this->assertCount(1, $reply->favorites);
+    }
+
+    /** @test */
+    public function a_reply_can_have_a_thread()
+    {
+        $reply = Reply::factory()->hasThread()->create();
+
+        $this->assertInstanceOf(Thread::class, $reply->thread);
     }
 }

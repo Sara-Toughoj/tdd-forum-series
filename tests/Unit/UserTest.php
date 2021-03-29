@@ -2,6 +2,7 @@
 
 namespace Tests\Unit;
 
+use App\Models\Activity;
 use App\Models\Reply;
 use App\Models\Thread;
 use App\Models\User;
@@ -27,11 +28,22 @@ class UserTest extends TestCase
     public function a_user_can_has_threads()
     {
         $user = create(User::class);
-        $thread = create(Thread::class, [
+        create(Thread::class, [
             'user_id' => $user->id
         ]);
 
         $this->assertInstanceOf(Thread::class, $user->threads->first());
         $this->assertInstanceOf(Collection::class, $user->threads);
+    }
+
+
+    /** @test */
+    public function a_user_has_activity()
+    {
+        $user = User::factory()->hasActivity()->create();
+
+        $this->assertInstanceOf(Activity::class, $user->activity->first());
+        $this->assertInstanceOf(Collection::class, $user->activity);
+
     }
 }
