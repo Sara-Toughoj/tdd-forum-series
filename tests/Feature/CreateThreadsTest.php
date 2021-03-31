@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\Activity;
 use App\Models\Channel;
 use App\Models\Reply;
 use App\Models\Thread;
@@ -101,6 +102,8 @@ class CreateThreadsTest extends TestCase
         $this->assertDatabaseMissing((new Thread())->getTable(), ['id' => $thread->id]);
         $this->assertDatabaseMissing((new Reply())->getTable(), ['id' => $reply->id]);
 
+
+        $this->assertEquals(0, Activity::count());
     }
 
 
