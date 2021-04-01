@@ -16,10 +16,11 @@
                     </h4>
                     <hr/>
                     @foreach($activity_group as $activity)
-                        @include("profiles.activities.$activity->type")
+                        @if(view()->exists("profiles.activities.$activity->type"))
+                            @include("profiles.activities.$activity->type")
+                        @endif
                     @endforeach
                     <div class="mt-3">
-                        {{--                    {{$threads->links("pagination::bootstrap-4")}}--}}
                     </div>
                 @endforeach
             </div>
