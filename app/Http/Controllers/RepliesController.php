@@ -21,4 +21,13 @@ class RepliesController extends Controller
 
         return back()->with('flash', "Your reply has been left");
     }
+
+    public function destroy(Reply $reply)
+    {
+        $this->authorize('destroy', $reply);
+
+        $reply->delete();
+        return back()->with('flash', 'Reply Deleted successfully');
+
+    }
 }

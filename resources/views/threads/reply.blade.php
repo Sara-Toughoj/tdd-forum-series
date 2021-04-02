@@ -20,4 +20,14 @@
     <div class="card-body">
         <article> {{$reply->body}} </article>
     </div>
+
+    @can('destroy' , $reply)
+        <div class="card-footer">
+            <form method="post" action="/replies/{{$reply->id}}">
+                @csrf
+                @method('delete')
+                <button class="btn btn-danger btn-sm" type="submit"> Delete</button>
+            </form>
+        </div>
+    @endcan
 </div>
