@@ -22,7 +22,7 @@
             <div v-if="editing">
                 <div class="form-group">
                     <textarea class="form-control mb-2" v-model="body"></textarea>
-                    <button class="btn btn-primary" @click.prevent="update"> Update</button>
+                    <button class="btn btn-primary" @click="update"> Update</button>
                     <button class="btn btn-link" @click="editing=false"> Cancel</button>
                 </div>
             </div>
@@ -32,11 +32,7 @@
         @can('update' , $reply)
             <div class="card-footer level">
                 <button class="btn btn-primary mr-3" @click="editing=true"> Edit</button>
-                <form method="post" action="/replies/{{$reply->id}}">
-                    @csrf
-                    @method('delete')
-                    <button class="btn btn-danger " type="submit"> Delete</button>
-                </form>
+                <button class="btn btn-danger " @click="destroy"> Delete</button>
             </div>
         @endcan
     </div>

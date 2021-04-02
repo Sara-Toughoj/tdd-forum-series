@@ -27,6 +27,11 @@ class RepliesController extends Controller
         $this->authorize('update', $reply);
 
         $reply->delete();
+
+        if (request()->expectsJson()) {
+            return response(['status' => 'Reply Delet']);
+        }
+
         return back()->with('flash', 'Reply Deleted successfully');
 
     }
