@@ -32,6 +32,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('/threads', ThreadsController::class)->except('index', 'show', 'delete');
     Route::post('/replies/{reply}/favorites', [FavoritesController::class, 'store']);
     Route::delete('/replies/{reply}', [RepliesController::class, 'destroy']);
+    Route::patch('/replies/{reply}', [RepliesController::class, 'update']);
 });
 
 Route::get('/threads', [ThreadsController::class, 'index']);

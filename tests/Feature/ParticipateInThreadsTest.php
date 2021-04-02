@@ -81,4 +81,57 @@ class ParticipateInThreadsTest extends TestCase
         $this->assertDatabaseMissing((new Reply())->getTable(), ['id' => $reply->id]);
 
     }
+
+    /** @test */
+    public function unauthorized_users_can_not_update_replies()
+    {
+        $this->withExceptionHandling();
+        $reply = create(Reply::class);
+
+        $this->patchJson("/replies/$reply->id")
+            ->assertStatus(401);
+
+        $this->signIn();
+
+        $this->patchJson("/replies/$reply->id")
+            ->assertStatus(403);
+
+    }
+
+    /** @test */
+    public function replies_update_request_should_has_body()
+    {
+        $this->withExceptionHandling();
+        $this->signIn();
+        $reply = create(Reply::class, [
+            'user_id' => auth()->id()
+        ]);
+
+        $this->patchJson("/replies/$reply->id")
+            ->assertStatus(422);
+
+        $this->assertDatabaseHas((new Reply())->getTable(), [
+            'id' => $reply->id,
+            'body' => $reply->body
+        ]);
+    }
+
+    /** @test */
+    public function authorized_users_can_update_replies()
+    {
+        $this->signIn();
+        $reply = create(Reply::class, [
+            'user_id' => auth()->id()
+        ]);
+
+        $this->patchJson("/replies/$reply->id", [
+            "body" => $new_body = $this->faker->text
+        ]);
+
+        $this->assertDatabaseHas((new Reply())->getTable(), [
+            'id' => $reply->id,
+            'body' => $new_body
+        ]);
+
+    }
 }
