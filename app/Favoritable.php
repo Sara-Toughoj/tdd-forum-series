@@ -22,8 +22,31 @@ trait Favoritable
 
     public function favorite()
     {
-        $this->favorites()->firstOrcreate([
+        $attributes = [
             'user_id' => auth()->id()
-        ]);
+        ];
+
+        if (!$this->favorites()->where($attributes)->exists()) {
+            return $this->favorites()->create($attributes);
+        }
+    }
+
+    public function unfavorite()
+    {
+        $attributes = [
+            'user_id' => auth()->id()
+        ];
+
+        $this->favorites()->where($attributes)->delete();
+    }
+
+    public function getFavoritesCountAttribute()
+    {
+        return $this->favorites()->count();
+    }
+
+    public function getIsFavoritedAttribute()
+    {
+        return $this->isFavorited();
     }
 }

@@ -2,21 +2,18 @@
 
 namespace App\Policies;
 
+use App\Models\Favorite;
 use App\Models\Reply;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
-class ReplyPolicy
+class FavoritePolicy
 {
     use HandlesAuthorization;
 
-    public function update(User $user, Reply $reply)
+    public function update(User $user, Favorite $reply)
     {
         return $user->id == $reply->user_id;
     }
 
-    public function unfavorite(User $user, Reply $reply)
-    {
-        return !!$reply->favorites()->where('user_id', $user->id)->count();
-    }
 }

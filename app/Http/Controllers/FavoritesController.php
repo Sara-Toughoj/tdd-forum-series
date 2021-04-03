@@ -13,4 +13,10 @@ class FavoritesController extends Controller
         $reply->favorite();
         return redirect()->back();
     }
+
+    public function destroy(Reply $reply)
+    {
+        $this->authorize('unfavorite', $reply);
+        $reply->unfavorite();
+    }
 }

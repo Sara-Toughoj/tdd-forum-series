@@ -31,6 +31,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/threads/{channel}/{thread}', [ThreadsController::class, 'destroy']);
     Route::resource('/threads', ThreadsController::class)->except('index', 'show', 'delete');
     Route::post('/replies/{reply}/favorites', [FavoritesController::class, 'store']);
+    Route::delete('/replies/{reply}/favorites', [FavoritesController::class, 'destroy']);
     Route::delete('/replies/{reply}', [RepliesController::class, 'destroy']);
     Route::patch('/replies/{reply}', [RepliesController::class, 'update']);
 });

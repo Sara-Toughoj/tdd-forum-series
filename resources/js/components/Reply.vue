@@ -3,7 +3,13 @@
 </template>
 
 <script>
+    import Favorite from "./Favorite";
+
     export default {
+        components: {
+            Favorite
+        },
+
         data() {
             return {
                 editing: false,
