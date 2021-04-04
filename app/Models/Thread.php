@@ -17,7 +17,7 @@ class Thread extends Model
     protected $with = ['channel'];
 
 
-    //-------------------------------------  Global Scopes  -------------------------------------
+    //-------------------------------------  Boot  -------------------------------------
 
     protected static function boot()
     {

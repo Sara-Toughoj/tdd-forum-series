@@ -10,6 +10,13 @@ use App\Models\Reply;
 trait Favoritable
 {
 
+    protected static function bootFavoritable()
+    {
+        static::deleting(function ($model) {
+            $model->favorites->each->delete();
+        });
+    }
+    
     public function isFavorited()
     {
         return !!$this->favorites->where('user_id', auth()->id())->count();
@@ -37,7 +44,7 @@ trait Favoritable
             'user_id' => auth()->id()
         ];
 
-        $this->favorites()->where($attributes)->delete();
+        $this->favorites()->where($attributes)->get()->each->delete();
     }
 
     public function getFavoritesCountAttribute()

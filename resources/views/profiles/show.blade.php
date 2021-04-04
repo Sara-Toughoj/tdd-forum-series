@@ -8,9 +8,10 @@
                     <h1>
                         {{$profileUser->name}}
                     </h1>
+                    <hr>
                 </div>
 
-                @foreach($activities as $activities_date =>$activity_group)
+                @forelse($activities as $activities_date =>$activity_group)
                     <h4 class="mt-4">
                         {{$activities_date}}
                     </h4>
@@ -22,7 +23,9 @@
                     @endforeach
                     <div class="mt-3">
                     </div>
-                @endforeach
+                @empty
+                    <h5> No recent activity</h5>
+                @endforelse
             </div>
         </div>
     </div>

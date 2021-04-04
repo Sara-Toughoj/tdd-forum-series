@@ -77,6 +77,8 @@ class FavoritesTest extends TestCase
             ->assertStatus(200);
 
         $this->assertCount(0, $reply->fresh()->favorites);
-
     }
+
+    /** @test */
+
 }
