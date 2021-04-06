@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Reply;
 use App\Models\Thread;
-use Illuminate\Http\Request;
+
 
 class RepliesController extends Controller
 {
@@ -14,10 +14,14 @@ class RepliesController extends Controller
             'body' => 'required'
         ]);
 
-        $thread->addReply([
+        $reply = $thread->addReply([
             'body' => request()->body,
             'user_id' => auth()->id(),
         ]);
+
+        if (request()->wantsJson()) {
+            return response($reply->load('owner'));
+        }
 
         return back()->with('flash', "Your reply has been left");
     }

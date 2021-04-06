@@ -3,20 +3,26 @@
         <div v-for="(reply,index) in items">
             <reply :data="reply" @deleted="remove(index)" :key="reply.id"></reply>
         </div>
+        <new-reply @created="add" :endpoint="endpoint"></new-reply>
     </div>
 
 </template>
 
 <script>
     import Reply from "./Reply";
+    import NewReply from "./NewReply";
 
     export default {
-        components: {Reply},
-        props: ['data'],
+        components: {
+            Reply,
+            NewReply
+        },
+        props: ['data',],
 
         data() {
             return {
-                items: this.data
+                items: this.data,
+                endpoint: location.pathname + '/replies'
             }
         },
         methods: {
@@ -25,6 +31,10 @@
                 flash('Deleted');
 
                 this.$emit('removed')
+            },
+            add(reply) {
+                this.items.push(reply)
+                this.$emit('added')
             }
         }
 

@@ -28,24 +28,9 @@
                         </div>
                     </div>
 
-                    <replies :data="{{$thread->replies}}" @removed="repliesCount--"></replies>
-
-                    @auth
-                        <form method="post" action='{{$thread->path() ."/replies"}}'>
-                            @csrf
-                            <div class="form-group mt-3">
-                                <textarea name="body" id="body" class="form-control" placeholder="Have something to say ?" rows="5"></textarea>
-                            </div>
-                            <button type="submit" class="btn btn-primary"> Post</button>
-                        </form>
-                    @else
-                        <p>Please
-                            <a href="{{route('login')}}">
-                                sign in
-                            </a>
-                            to participate
-                        </p>
-                    @endauth
+                    <replies :data="{{$thread->replies}}"
+                             @removed="repliesCount--"
+                             @added="repliesCount++"></replies>
 
                 </div>
 
