@@ -51,6 +51,10 @@ class RepliesController extends Controller
         $reply->update([
             'body' => request()->body
         ]);
+    }
 
+    public function index($channel, Thread $thread)
+    {
+        return $thread->replies()->paginate(1);
     }
 }

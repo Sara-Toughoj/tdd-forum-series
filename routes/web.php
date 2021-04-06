@@ -36,6 +36,7 @@ Route::middleware('auth')->group(function () {
     Route::patch('/replies/{reply}', [RepliesController::class, 'update']);
 });
 
+Route::get('/threads/{channel}/{thread}/replies', [RepliesController::class, 'index'])->name('replies.store');
 Route::get('/threads', [ThreadsController::class, 'index']);
 Route::get('/threads/{channel}/{thread}', [ThreadsController::class, 'show']);
 Route::get('/threads/{channel}', [ThreadsController::class, 'index']);
