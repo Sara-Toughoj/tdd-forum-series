@@ -38,7 +38,7 @@ class ParticipateInThreadsTest extends TestCase
         $this->assertEquals($new_reply->body, $body);
         $this->assertEquals($new_reply->owner->id, $user->id);
 
-        $this->get($thread->path())->assertSee($new_reply->body);
+        $this->assertDatabaseHas((new Reply())->getTable(), ['body' => $body]);
     }
 
     /** @test */
