@@ -39,6 +39,7 @@ class ParticipateInThreadsTest extends TestCase
         $this->assertEquals($new_reply->owner->id, $user->id);
 
         $this->assertDatabaseHas((new Reply())->getTable(), ['body' => $body]);
+        $this->assertEquals(1, $thread->refresh()->replies_count);
     }
 
     /** @test */
@@ -79,6 +80,8 @@ class ParticipateInThreadsTest extends TestCase
         $this->delete("/replies/$reply->id");
 
         $this->assertDatabaseMissing((new Reply())->getTable(), ['id' => $reply->id]);
+
+        $this->assertEquals(0, $reply->thread->refresh()->replies_count);
 
     }
 

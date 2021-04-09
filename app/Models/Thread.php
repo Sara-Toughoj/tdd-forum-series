@@ -10,9 +10,8 @@ class Thread extends Model
 {
     use HasFactory, RecordsActivity;
 
-    protected $fillable = ['body', 'title', 'user_id', 'channel_id'];
+    protected $fillable = ['body', 'title', 'user_id', 'channel_id', 'replies_count'];
 
-    protected $withCount = ['replies'];
 
     protected $with = ['channel'];
 
