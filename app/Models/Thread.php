@@ -47,6 +47,20 @@ class Thread extends Model
         return $filters->apply($query);
     }
 
+    public function subscribe($user_id = null)
+    {
+        $this->subscriptions()->create([
+            'user_id' => $user_id ?? auth()->id()
+        ]);
+    }
+
+    public function unsubscribe($user_id = null)
+    {
+        $this->subscriptions()
+            ->where('user_id', $user_id ?? auth()->id())
+            ->delete();
+    }
+
 
     //-------------------------------------  Relationships  -------------------------------------
 
@@ -66,6 +80,11 @@ class Thread extends Model
     public function channel()
     {
         return $this->belongsTo(Channel::class);
+    }
+
+    public function subscriptions()
+    {
+        return $this->hasMany(ThreadSubscription::class);
     }
 
 

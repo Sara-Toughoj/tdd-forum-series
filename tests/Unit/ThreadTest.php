@@ -5,6 +5,7 @@ namespace Tests\Unit;
 use App\Models\Channel;
 use App\Models\Reply;
 use App\Models\Thread;
+use App\Models\ThreadSubscription;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -59,5 +60,31 @@ class ThreadTest extends TestCase
     {
         $thread = Thread::factory()->hasChannel()->create();
         $this->assertInstanceOf(Channel::class, $thread->channel);
+    }
+
+    /** @test */
+    public function a_thread_can_be_subscribed_to()
+    {
+        $thread = create(Thread::Class);
+
+        $thread->subscribe($user_id = 1);
+
+        $subscriptions = $thread->subscriptions()->where('user_id', $user_id)->get();
+
+        $this->assertCount(1, $subscriptions);
+    }
+
+    /** @test */
+    public function a_thread_can_be_unsubscribed_from()
+    {
+        $thread = create(Thread::class);
+
+        $thread->subscribe($user_id = 1);
+
+        $thread->unsubscribe($user_id);
+
+        $this->assertCount(0, $thread->subscriptions);
+
+
     }
 }
