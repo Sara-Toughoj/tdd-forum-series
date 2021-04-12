@@ -3,6 +3,7 @@
 use App\Http\Controllers\FavoritesController;
 use App\Http\Controllers\ProfilesController;
 use App\Http\Controllers\RepliesController;
+use App\Http\Controllers\SubscriptionsController;
 use App\Http\Controllers\ThreadsController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -28,6 +29,8 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 
 Route::middleware('auth')->group(function () {
     Route::post('/threads/{channel}/{thread}/replies', [RepliesController::class, 'store'])->name('replies.store');
+    Route::post('/threads/{channel}/{thread}/subscriptions', [SubscriptionsController::class, 'store'])->name('subscriptions.store');
+    Route::delete('/threads/{channel}/{thread}/subscriptions', [SubscriptionsController::class, 'delete'])->name('subscriptions.delete');
     Route::delete('/threads/{channel}/{thread}', [ThreadsController::class, 'destroy']);
     Route::resource('/threads', ThreadsController::class)->except('index', 'show', 'delete');
     Route::post('/replies/{reply}/favorites', [FavoritesController::class, 'store']);
