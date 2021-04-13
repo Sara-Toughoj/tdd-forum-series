@@ -15,6 +15,8 @@ class Thread extends Model
 
     protected $with = ['channel'];
 
+    protected $appends = ['isSubscribedTo'];
+
 
     //-------------------------------------  Boot  -------------------------------------
 
@@ -87,5 +89,12 @@ class Thread extends Model
         return $this->hasMany(ThreadSubscription::class);
     }
 
+    //-------------------------------------  Accessors and Mutators  -------------------------------------
+    public function getIsSubscribedToAttribute()
+    {
+        return $this->subscriptions()
+            ->where('user_id', auth()->id())
+            ->exists();
+    }
 
 }

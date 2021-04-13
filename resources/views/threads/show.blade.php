@@ -41,6 +41,9 @@
                                 and currently has <span v-text="repliesCount"> </span>
                                 {{Str::plural('comment' , $thread->replies_count)}}
                             </article>
+                            @auth
+                                <subscribe-button is-subscribed="{{$thread->isSubscribedTo}}"></subscribe-button>
+                            @endauth
                         </div>
                     </div>
                 </div>
