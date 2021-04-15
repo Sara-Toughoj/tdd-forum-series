@@ -20,10 +20,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
@@ -39,11 +35,11 @@ Route::middleware('auth')->group(function () {
     Route::delete('/replies/{reply}', [RepliesController::class, 'destroy']);
     Route::patch('/replies/{reply}', [RepliesController::class, 'update']);
     Route::delete('/profiles/{user}/notifications/{notification}', [UserNotificationsController::class, 'destroy'])->name('notifications.delete');
-    Route::get  ('/profiles/{user}/notifications', [UserNotificationsController::class, 'index'])->name('notifications.index');
+    Route::get('/profiles/{user}/notifications', [UserNotificationsController::class, 'index'])->name('notifications.index');
 });
 
 Route::get('/threads/{channel}/{thread}/replies', [RepliesController::class, 'index'])->name('replies.store');
-Route::get('/threads', [ThreadsController::class, 'index']);
+Route::get('/', [ThreadsController::class, 'index']);
 Route::get('/threads/{channel}/{thread}', [ThreadsController::class, 'show']);
 Route::get('/threads/{channel}', [ThreadsController::class, 'index']);
 Route::get('/profiles/{user}', [ProfilesController::class, 'show'])->name('profile');
