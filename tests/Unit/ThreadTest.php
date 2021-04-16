@@ -5,10 +5,11 @@ namespace Tests\Unit;
 use App\Models\Channel;
 use App\Models\Reply;
 use App\Models\Thread;
-use App\Models\ThreadSubscription;
 use App\Models\User;
+use App\Notifications\ThreadWasUpdated;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Facades\Notification;
 use Tests\TestCase;
 
 class ThreadTest extends TestCase
@@ -41,18 +42,32 @@ class ThreadTest extends TestCase
     public function a_thread_can_add_reply()
     {
         $thread = create(Thread::class);
-        $user = create(User::class);
 
         $this->assertCount(0, $thread->replies);
 
         $thread->addReply([
             'body' => $body = $this->faker->paragraph,
-            'user_id' => $user->id,
+            'user_id' => create(User::class)->id,
         ]);
 
-        $thread->refresh();
+        $this->assertCount(1, $thread->refresh()->replies);
+    }
 
-        $this->assertCount(1, $thread->replies);
+    /** @test */
+    public function a_thread_notifies_all_registered_subscribers_when_a_reply_is_added()
+    {
+        Notification::fake();
+
+        $thread = create(Thread::class);
+        $this->signIn();
+
+        $thread->subscribe()->addReply([
+            'body' => $body = $this->faker->paragraph,
+            'user_id' => create(User::class)->id,
+        ]);
+
+        Notification::assertSentTo(auth()->user(), ThreadWasUpdated::class);
+
     }
 
     /** @test */
