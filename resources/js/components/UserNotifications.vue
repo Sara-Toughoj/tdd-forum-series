@@ -6,7 +6,11 @@
             </svg>
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <a v-for="notification in notifications" class="dropdown-item" href="#">Foo Bar </a>
+            <a v-for="notification in notifications"
+               class="dropdown-item"
+               :href="notification.data.link"
+               v-text="notification.data.message"
+               @click="markAsRead(notification)"> </a>
         </div>
     </li>
 </template>
@@ -15,16 +19,27 @@
     export default {
         data() {
             return {
-                notifications: ['false']
+                notifications: false
             }
         },
         created() {
-            axios.get(`/profiles/${window.app.user.name}/notifications`)
+            axios.get(`/profiles/${window.App.user.name}/notifications`)
                 .then(response => this.notifications = response.data);
+        },
+
+        methods: {
+            markAsRead(notification) {
+                axios.delete(`/profiles/${window.App.user.name}/notifications/${notification.id}`);
+
+            }
         }
     }
 </script>
 
 <style scoped>
+    .dropdown-menu {
+        right: 0 !important;
+        left: auto !important;
+    }
 
 </style>
