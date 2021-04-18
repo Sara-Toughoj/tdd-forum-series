@@ -48,7 +48,7 @@ class Thread extends Model
 
         return $reply;
     }
-    
+
     public function notifySubscribers($reply)
     {
         $this->subscriptions
@@ -76,6 +76,16 @@ class Thread extends Model
         $this->subscriptions()
             ->where('user_id', $user_id ?? auth()->id())
             ->delete();
+    }
+
+    public function hasUpdatesFor($user = null)
+    {
+        $user = $user ?? auth()->user();
+
+        if (!$user) return false;
+        
+        $key = $user->visitedThreadCacheKey($this);
+        return $this->updated_at > cache($key);
     }
 
 
