@@ -127,10 +127,5 @@ class ThreadTest extends TestCase
 
         $this->assertFalse($thread->refresh()->hasUpdatesFor());
 
-//        $reply = $thread->addReply(make(Reply::class, ['thread_id' => $thread->id])->toArray());
-//
-//
-//        $this->assertTrue($thread->refresh()->hasUpdatesFor());
-
     }
 }
