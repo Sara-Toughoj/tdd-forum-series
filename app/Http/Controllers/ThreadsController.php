@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Filters\ThreadFilters;
+use App\Inspections\Spam;
 use App\Models\Channel;
 use App\Models\Thread;
 use Illuminate\Contracts\Foundation\Application;
@@ -53,7 +54,7 @@ class ThreadsController extends Controller
      * @return Application|RedirectResponse|Redirector
      * @throws ValidationException
      */
-    public function store(Request $request)
+    public function store(Request $request, Spam $spam)
     {
 
         $this->validate($request, [
@@ -61,6 +62,8 @@ class ThreadsController extends Controller
             'body' => 'required',
             'channel_id' => 'required|exists:' . (new Channel())->getTable() . ',id'
         ]);
+
+        $spam->detect(request('body'));
 
         $thread = Thread::create([
             'title' => $request->title,
