@@ -12,6 +12,7 @@
                       rows="5">
             </textarea>
             </div>
+
             <button type="submit"
                     class="btn btn-primary"
                     @click="addReply"> Post
@@ -52,6 +53,8 @@
                     this.body = '';
                     flash('Your reply has been posted.');
                     this.$emit('created', data.data);
+                }).catch((error) => {
+                    flash(error.response.data, 'danger');
                 });
             }
         }

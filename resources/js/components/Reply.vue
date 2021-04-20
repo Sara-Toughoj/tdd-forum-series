@@ -78,6 +78,8 @@
                 }).then(() => {
                     this.editing = false
                     flash('Updated')
+                }).catch(error => {
+                    flash(error.response.data, 'danger');
                 });
             },
 

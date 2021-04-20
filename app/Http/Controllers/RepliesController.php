@@ -11,18 +11,18 @@ class RepliesController extends Controller
 {
     public function store($channel, Thread $thread)
     {
-        $this->validateReply();
+        try {
+            $this->validateReply();
 
-        $reply = $thread->addReply([
-            'body' => request()->body,
-            'user_id' => auth()->id(),
-        ]);
-
-        if (request()->wantsJson()) {
-            return response($reply->load('owner'));
+            $reply = $thread->addReply([
+                'body' => request()->body,
+                'user_id' => auth()->id(),
+            ]);
+        } catch (\Exception $e) {
+            return response($e->getMessage(), 422);
         }
 
-        return back()->with('flash', "Your reply has been left");
+        return response($reply->load('owner'));
     }
 
     public function destroy(Reply $reply)
@@ -42,12 +42,16 @@ class RepliesController extends Controller
     public function update(Reply $reply)
     {
         $this->authorize('update', $reply);
+        try {
+            $this->validateReply();
 
-        $this->validateReply();
+            $reply->update([
+                'body' => request()->body
+            ]);
+        } catch (\Exception $e) {
+            return response($e->getMessage(), 422);
+        }
 
-        $reply->update([
-            'body' => request()->body
-        ]);
     }
 
     public function index($channel, Thread $thread)
