@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Inspections\Spam;
 use App\Models\Reply;
 use App\Models\Thread;
+use App\Rules\SpamFree;
 
 
 class RepliesController extends Controller
@@ -12,7 +12,13 @@ class RepliesController extends Controller
     public function store($channel, Thread $thread)
     {
         try {
-            $this->validateReply();
+            $validator = validator(request()->all(), [
+                'body' => ['required', new SpamFree()],
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json($validator->errors(), 422);
+            }
 
             $reply = $thread->addReply([
                 'body' => request()->body,
@@ -43,7 +49,13 @@ class RepliesController extends Controller
     {
         $this->authorize('update', $reply);
         try {
-            $this->validateReply();
+            $validator = validator(request()->all(), [
+                'body' => ['required', new SpamFree()],
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json($validator->errors(), 422);
+            }
 
             $reply->update([
                 'body' => request()->body
@@ -57,14 +69,5 @@ class RepliesController extends Controller
     public function index($channel, Thread $thread)
     {
         return $thread->replies()->paginate(20);
-    }
-
-    protected function validateReply()
-    {
-        $this->validate(request(), [
-            'body' => 'required'
-        ]);
-
-        resolve(Spam::class)->detect(request('body'));
     }
 }
