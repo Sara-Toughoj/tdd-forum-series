@@ -79,7 +79,7 @@
                     this.editing = false
                     flash('Updated')
                 }).catch(error => {
-                    flash(error.response.data, 'danger');
+                    flash(error.response.data.body[0], 'danger');
                 });
             },
 

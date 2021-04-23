@@ -6,6 +6,7 @@ use App\Models\Favorite;
 use App\Models\Reply;
 use App\Models\Thread;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -48,5 +49,17 @@ class ReplyTest extends TestCase
         $reply = Reply::factory()->hasThread()->create();
 
         $this->assertInstanceOf(Thread::class, $reply->thread);
+    }
+
+    /** @test */
+    public function a_reply_knows_it_was_just_published()
+    {
+        $reply = create(Reply::class);
+
+        $this->assertTrue($reply->wasJustPublished());
+
+        $reply->created_at = Carbon::now()->subMonth();
+
+        $this->assertFalse($reply->wasJustPublished());
     }
 }

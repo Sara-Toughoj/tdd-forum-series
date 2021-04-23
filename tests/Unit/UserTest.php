@@ -25,7 +25,7 @@ class UserTest extends TestCase
     }
 
     /** @test */
-    public function a_user_can_has_threads()
+    public function a_user_can_have_threads()
     {
         $user = create(User::class);
         create(Thread::class, [
@@ -44,6 +44,17 @@ class UserTest extends TestCase
 
         $this->assertInstanceOf(Activity::class, $user->activity->first());
         $this->assertInstanceOf(Collection::class, $user->activity);
+    }
+
+    /** @test */
+
+    public function a_user_can_fetch_their_most_recent_reply()
+    {
+        $user = create(User::class);
+
+        $reply = create(Reply::class, ['user_id' => $user->id]);
+
+        $this->assertEquals($user->lastReply->id, $reply->id);
 
     }
 }

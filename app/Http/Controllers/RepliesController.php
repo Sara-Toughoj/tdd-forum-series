@@ -5,13 +5,20 @@ namespace App\Http\Controllers;
 use App\Models\Reply;
 use App\Models\Thread;
 use App\Rules\SpamFree;
+use Illuminate\Support\Facades\Gate;
+use Monolog\Logger;
 
 
 class RepliesController extends Controller
 {
     public function store($channel, Thread $thread)
     {
+        $this->authorize('create', Reply::class);
         try {
+            if (request()->user()->cannot('create', Reply::class)) {
+                return response()->json('You are posting too frequently, Please take a break. :)', 422);
+            }
+
             $validator = validator(request()->all(), [
                 'body' => ['required', new SpamFree()],
             ]);

@@ -55,6 +55,11 @@ class User extends Authenticatable
         return $this->hasMany(Reply::class);
     }
 
+    public function lastReply()
+    {
+        return $this->hasOne(Reply::class)->latest();
+    }
+
     public function threads()
     {
         return $this->hasMany(Thread::class)->latest();
@@ -64,6 +69,7 @@ class User extends Authenticatable
     {
         return $this->hasMany(Activity::class);
     }
+
 
     //------------------------------- Tools -------------------------------
     public function visitedThreadCacheKey($thread)
