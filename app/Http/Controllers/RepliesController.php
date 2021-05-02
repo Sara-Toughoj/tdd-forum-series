@@ -6,19 +6,17 @@ use App\Models\Reply;
 use App\Models\Thread;
 use App\Rules\SpamFree;
 use Illuminate\Support\Facades\Gate;
-use Monolog\Logger;
 
 
 class RepliesController extends Controller
 {
     public function store($channel, Thread $thread)
     {
-        $this->authorize('create', Reply::class);
+        if (Gate::denies('create', new Reply)) {
+            return response('You are posting too frequently, please take a break ', 422);
+        }
+        
         try {
-            if (request()->user()->cannot('create', Reply::class)) {
-                return response()->json('You are posting too frequently, Please take a break. :)', 422);
-            }
-
             $validator = validator(request()->all(), [
                 'body' => ['required', new SpamFree()],
             ]);

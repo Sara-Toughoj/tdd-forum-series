@@ -54,8 +54,11 @@
                     flash('Your reply has been posted.');
                     this.$emit('created', data.data);
                 }).catch((error) => {
-                    console.log(error.response.body);
-                    flash(error.response.data.body[0], 'danger');
+                    if (typeof error.response.data.body == 'undefined') {
+                        flash(error.response.data, 'danger');
+                    } else {
+                        flash(error.response.data.body[0], 'danger');
+                    }
                 });
             }
         }

@@ -22,7 +22,6 @@ class ReplyPolicy
 
     public function create(User $user)
     {
-        Logger('we are in policy');
         return $user->fresh()->lastReply ? !$user->lastReply->wasJustPublished() : true;
     }
 }
