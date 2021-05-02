@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Forms\CreatePostForm;
 use App\Models\Reply;
 use App\Models\Thread;
 use App\Rules\SpamFree;
@@ -10,30 +11,9 @@ use Illuminate\Support\Facades\Gate;
 
 class RepliesController extends Controller
 {
-    public function store($channel, Thread $thread)
+    public function store($channel, Thread $thread, CreatePostForm $form)
     {
-        if (Gate::denies('create', new Reply)) {
-            return response('You are posting too frequently, please take a break ', 422);
-        }
-        
-        try {
-            $validator = validator(request()->all(), [
-                'body' => ['required', new SpamFree()],
-            ]);
-
-            if ($validator->fails()) {
-                return response()->json($validator->errors(), 422);
-            }
-
-            $reply = $thread->addReply([
-                'body' => request()->body,
-                'user_id' => auth()->id(),
-            ]);
-        } catch (\Exception $e) {
-            return response($e->getMessage(), 422);
-        }
-
-        return response($reply->load('owner'));
+        $form->persist($thread);
     }
 
     public function destroy(Reply $reply)
