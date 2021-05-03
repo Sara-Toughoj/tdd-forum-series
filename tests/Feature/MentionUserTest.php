@@ -21,7 +21,7 @@ class MentionUserTest extends TestCase
 
         $this->postJson($thread->path() . '/replies', [
             'body' => 'mentioning @' . $mentioned_user->name
-        ])->assertStatus(200);
+        ])->assertStatus(201);
 
         $this->assertCount(1, $mentioned_user->notifications);
 

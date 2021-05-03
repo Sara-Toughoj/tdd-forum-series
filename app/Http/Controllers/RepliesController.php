@@ -15,19 +15,7 @@ class RepliesController extends Controller
 {
     public function store($channel, Thread $thread, CreatePostForm $form)
     {
-        $reply = $form->persist($thread);
-
-        preg_match_all('/\@([^\s\.]+)/', $reply->body, $matches);
-        $names = $matches[1];
-
-        foreach ($names as $name) {
-            $user = User::where('name', 'like', '%' . $name . '%')->first();
-            if ($user) {
-                $user->notify(new YouWereMentioned($reply));
-            }
-        }
-
-        return response($reply);
+        return $form->persist($thread);
     }
 
     public function destroy(Reply $reply)
