@@ -35,22 +35,14 @@ class RepliesController extends Controller
     public function update(Reply $reply)
     {
         $this->authorize('update', $reply);
-        try {
-            $validator = validator(request()->all(), [
-                'body' => ['required', new SpamFree()],
-            ]);
+        $this->validate(request(), [
+            'body' => ['required', new SpamFree()],
+        ]);
 
-            if ($validator->fails()) {
-                return response()->json($validator->errors(), 422);
-            }
-
-            $reply->update([
-                'body' => request()->body
-            ]);
-        } catch (\Exception $e) {
-            return response($e->getMessage(), 422);
-        }
-
+        $reply->update([
+            'body' => request()->body
+        ]);
+        
     }
 
     public function index($channel, Thread $thread)

@@ -39,7 +39,7 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::get('/threads/{channel}/{thread}/replies', [RepliesController::class, 'index'])->name('replies.store');
-Route::get('/threads', [ThreadsController::class, 'index']);
+Route::get('/', [ThreadsController::class, 'index']);
 Route::get('/threads/{channel}/{thread}', [ThreadsController::class, 'show']);
 Route::get('/threads/{channel}', [ThreadsController::class, 'index']);
 Route::get('/profiles/{user}', [ProfilesController::class, 'show'])->name('profile');

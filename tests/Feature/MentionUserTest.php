@@ -14,7 +14,7 @@ class MentionUserTest extends TestCase
     /** @test */
     public function mentioned_users_in_replies_are_notified()
     {
-        $mentioned_user = create(User::class);
+        $mentioned_user = create(User::class , ['name' => 'JaneDoe']);
 
         $this->signIn();
         $thread = create(Thread::class);

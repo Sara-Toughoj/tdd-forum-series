@@ -25,7 +25,7 @@ class ReadThreadsTest extends TestCase
     /** @test */
     public function a_user_can_view_all_threads()
     {
-        $this->get('/threads')
+        $this->get('/')
             ->assertSee($this->thread->body);
     }
 
@@ -59,7 +59,7 @@ class ReadThreadsTest extends TestCase
         $threadByJohn = create(Thread::class, ['user_id' => auth()->id()]);
         $threadNotByJohn = create(Thread::class);
 
-        $this->get('/threads?by=John Doe')
+        $this->get('/?by=John Doe')
             ->assertSee($threadByJohn->title)
             ->assertDontSee($threadNotByJohn->title);
     }
@@ -72,7 +72,7 @@ class ReadThreadsTest extends TestCase
         $threadWithNoReplies = $this->thread;
 
 
-        $response = $this->getJson("/threads?popular=1")->json();
+        $response = $this->getJson("/?popular=1")->json();
         $this->assertEquals([3, 2, 0], array_column($response, 'replies_count'));
 
     }
@@ -82,7 +82,7 @@ class ReadThreadsTest extends TestCase
     {
         Thread::factory()->hasReplies()->create();
 
-        $response = $this->getJson("/threads?unanswered=1")->json();
+        $response = $this->getJson("/?unanswered=1")->json();
         $this->assertCount(1, $response);
     }
 
