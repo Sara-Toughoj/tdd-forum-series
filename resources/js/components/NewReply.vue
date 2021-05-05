@@ -30,6 +30,8 @@
 </template>
 
 <script>
+    import Tribute from "tributejs";
+
     export default {
         data() {
             return {
@@ -38,13 +40,27 @@
         },
 
         computed: {
-
             signedIn() {
                 return window.App.signedIn;
             }
-
         },
 
+        mounted() {
+            let tribute = new Tribute({
+                // column to search against in the object (accepts function or string)
+                lookup: 'value',
+                // column that contains the content to insert by default
+                fillAttr: 'value',
+                values: function (query, cb) {
+                    axios.get('/api/users', {params: {name: query}})
+                        .then(function (response) {
+                            console.log(response);
+                            cb(response.data);
+                        });
+                },
+            });
+            tribute.attach(document.querySelectorAll("#body"));
+        },
         methods: {
             addReply() {
                 axios.post(location.pathname + '/replies', {

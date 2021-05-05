@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\FavoritesController;
 use App\Http\Controllers\ProfilesController;
 use App\Http\Controllers\RepliesController;
@@ -43,6 +44,8 @@ Route::get('/', [ThreadsController::class, 'index']);
 Route::get('/threads/{channel}/{thread}', [ThreadsController::class, 'show']);
 Route::get('/threads/{channel}', [ThreadsController::class, 'index']);
 Route::get('/profiles/{user}', [ProfilesController::class, 'show'])->name('profile');
+Route::get('/api/users', [UserController::class, 'index'])->name('user.index');
+
 
 
 

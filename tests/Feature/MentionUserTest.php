@@ -14,7 +14,7 @@ class MentionUserTest extends TestCase
     /** @test */
     public function mentioned_users_in_replies_are_notified()
     {
-        $mentioned_user = create(User::class , ['name' => 'JaneDoe']);
+        $mentioned_user = create(User::class, ['name' => 'JaneDoe']);
 
         $this->signIn();
         $thread = create(Thread::class);
@@ -25,6 +25,19 @@ class MentionUserTest extends TestCase
 
         $this->assertCount(1, $mentioned_user->notifications);
 
+
+    }
+
+    /** @test */
+    public function it_can_fetch_all_mentioned_users_starting_with_the_given_character()
+    {
+        create(User::class, ['name' => 'JohnDoe1']);
+        create(User::class, ['name' => 'JohnDoe2']);
+        create(User::class, ['name' => 'JaneDoe']);
+
+        $response = $this->getJson(route('user.index', ['name' => 'Jo']))->json();
+
+        $this->assertCount(2, $response);
 
     }
 
