@@ -6,6 +6,7 @@ use App\Http\Controllers\ProfilesController;
 use App\Http\Controllers\RepliesController;
 use App\Http\Controllers\SubscriptionsController;
 use App\Http\Controllers\ThreadsController;
+use App\Http\Controllers\UserAvatarController;
 use App\Http\Controllers\UserNotificationsController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -37,6 +38,7 @@ Route::middleware('auth')->group(function () {
     Route::patch('/replies/{reply}', [RepliesController::class, 'update']);
     Route::delete('/profiles/{user}/notifications/{notification}', [UserNotificationsController::class, 'destroy'])->name('notifications.delete');
     Route::get('/profiles/{user}/notifications', [UserNotificationsController::class, 'index'])->name('notifications.index');
+    Route::post('/api/users/{user}/avatar', [UserAvatarController::class, 'store']);
 });
 
 Route::get('/threads/{channel}/{thread}/replies', [RepliesController::class, 'index'])->name('replies.store');
