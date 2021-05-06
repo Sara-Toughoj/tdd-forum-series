@@ -38,11 +38,11 @@ Route::middleware('auth')->group(function () {
     Route::patch('/replies/{reply}', [RepliesController::class, 'update']);
     Route::delete('/profiles/{user}/notifications/{notification}', [UserNotificationsController::class, 'destroy'])->name('notifications.delete');
     Route::get('/profiles/{user}/notifications', [UserNotificationsController::class, 'index'])->name('notifications.index');
-    Route::post('/api/users/{user}/avatar', [UserAvatarController::class, 'store']);
+    Route::post('/api/users/{user}/avatar', [UserAvatarController::class, 'store'])->name('avatar');
 });
 
-Route::get('/threads/{channel}/{thread}/replies', [RepliesController::class, 'index'])->name('replies.store');
 Route::get('/', [ThreadsController::class, 'index']);
+Route::get('/threads/{channel}/{thread}/replies', [RepliesController::class, 'index'])->name('replies.store');
 Route::get('/threads/{channel}/{thread}', [ThreadsController::class, 'show']);
 Route::get('/threads/{channel}', [ThreadsController::class, 'index']);
 Route::get('/profiles/{user}', [ProfilesController::class, 'show'])->name('profile');

@@ -11,7 +11,10 @@
                 <div class="col-md-8">
                     <div class="card">
                         <div class="card-header level">
-                        <span class="flex">
+                            @if($thread->creator->avatar_path)
+                                <img src="{{$thread->creator->avatar()}}" alt="{{$thread->creator->name}}" width="25" height="25" class="mr-2">
+                            @endif
+                            <span class="flex">
                             <a href="{{route('profile',$thread->creator)}}"> {{$thread->creator->name}}</a>
                             posted:
                             {{$thread->title}}
