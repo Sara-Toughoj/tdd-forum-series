@@ -10,7 +10,6 @@ class UserAvatarController extends Controller
 {
     public function store()
     {
-        Logger(request()->all());
         $this->validate(request(), [
             'avatar' => ['required', 'image']
         ]);
@@ -19,6 +18,8 @@ class UserAvatarController extends Controller
             'avatar_path' => request()->file('avatar')->store('avatars', 'public')
         ]);
 
-        return back();
+        if (request()->wantsJson()) {
+            return response([], 204);
+        }
     }
 }

@@ -1,16 +1,19 @@
 <template>
     <div>
-        <h1 v-text="user.name"></h1>
-        <!--        accept="image/*" id="file" ref="myFiles" multiple-->
-        <input type="file" @change="onChange">
-        <button type="submit" class="btn btn-primary"> Add Avatar</button>
-        <img :src="avatar" width="50" height="50">
+        <div class="level">
+            <img :src="avatar" widt h="50" height="50" class="mr-3 mb-3">
+            <h1 v-text="user.name"></h1>
+        </div>
+        <image-upload name="avatar" @loaded="onLoad"></image-upload>
     </div>
 </template>
 
 <script>
+    import ImageUpload from "./ImageUpload";
+
     export default {
         props: ['user'],
+        components: {ImageUpload},
         data() {
             return {
                 url: `/api/users/${this.user.id}/avatar`,
@@ -23,27 +26,14 @@
             },
         },
         methods: {
-            onChange(e) {
-                if (!e.target.files[0]) return;
-
-
-                let avatar = e.target.files[0];
-                let reader = new FileReader();
-                reader.readAsDataURL(avatar);
-
-                reader.onload = e => {
-                    console.log(e);
-                    this.avatar = e.target.result;
-                }
-
-                this.persist(avatar);
-
+            onLoad(avatar) {
+                this.avatar = avatar.src;
+                this.persist(avatar.file);
             },
-
             persist(avatar) {
                 let data = new FormData();
                 data.append('avatar', avatar);
-                
+
                 axios.post(this.url, data).then(() => {
                     flash('Avatar uploaded');
                 });
