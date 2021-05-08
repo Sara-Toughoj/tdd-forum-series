@@ -10,6 +10,7 @@ class UserAvatarController extends Controller
 {
     public function store()
     {
+        Logger(request()->all());
         $this->validate(request(), [
             'avatar' => ['required', 'image']
         ]);

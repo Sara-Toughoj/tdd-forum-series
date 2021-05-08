@@ -35,6 +35,8 @@ class User extends Authenticatable
         'email',
     ];
 
+    protected $appends = ['avatar'];
+
     /**
      * The attributes that should be cast to native types.
      *
@@ -85,8 +87,8 @@ class User extends Authenticatable
         cache()->forever($key, Carbon::now());
     }
 
-    public function avatar()
+    public function getAvatarAttribute()
     {
-        return asset($this->avatar_path ? 'storage/' . $this->avatar_path : 'storage/avatars/default.jpg');
+        return asset($this->avatar_path ? 'storage/' . $this->avatar_path : 'storage/avatars/default.png');
     }
 }
