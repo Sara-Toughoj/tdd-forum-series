@@ -14,6 +14,23 @@
                     {{$threads->links("pagination::bootstrap-4")}}
                 </div>
             </div>
+            <div class="col-md-4 mt-3">
+                <div class="card">
+                    <div class="card-header">
+                        Trending Threads
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-group">
+                            @foreach($trending as $thread)
+                                <li class="list-group-item">
+                                    <a href="{{$thread->path}}">
+                                        {{$thread->title}}
+                                    </a>
+                                </li>
+                            @endforeach
+                        </ul>
+                    </div>
+                </div>
+            </div>
         </div>
-    </div>
 @endsection
