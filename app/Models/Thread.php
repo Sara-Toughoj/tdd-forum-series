@@ -4,12 +4,13 @@ namespace App\Models;
 
 use App\Events\ThreadReceivedNewReply;
 use App\RecordsActivity;
+use App\Visits;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Thread extends Model
 {
-    use HasFactory, RecordsActivity, RecordsVisits;
+    use HasFactory, RecordsActivity;
 
     protected $fillable = ['body', 'title', 'user_id', 'channel_id', 'replies_count'];
 
@@ -88,6 +89,10 @@ class Thread extends Model
         return $this->updated_at > cache($key);
     }
 
+    public function visits()
+    {
+        return new Visits($this);
+    }
 
     //-------------------------------------  Relationships  -------------------------------------
 
