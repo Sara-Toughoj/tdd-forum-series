@@ -8,6 +8,8 @@ use App\Http\Controllers\SubscriptionsController;
 use App\Http\Controllers\ThreadsController;
 use App\Http\Controllers\UserAvatarController;
 use App\Http\Controllers\UserNotificationsController;
+use http\Client\Request;
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -22,7 +24,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Auth::routes();
+Auth::routes(['verify' => true]);
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
@@ -31,7 +33,8 @@ Route::middleware('auth')->group(function () {
     Route::post('/threads/{channel}/{thread}/subscriptions', [SubscriptionsController::class, 'store'])->name('subscriptions.store');
     Route::delete('/threads/{channel}/{thread}/subscriptions', [SubscriptionsController::class, 'delete'])->name('subscriptions.delete');
     Route::delete('/threads/{channel}/{thread}', [ThreadsController::class, 'destroy']);
-    Route::resource('/threads', ThreadsController::class)->except('index', 'show', 'delete');
+    Route::resource('/threads', ThreadsController::class)->except('index', 'show', 'delete', 'store');
+    Route::post('/threads', [ThreadsController::class, 'store'])->middleware(['verified']);
     Route::post('/replies/{reply}/favorites', [FavoritesController::class, 'store']);
     Route::delete('/replies/{reply}/favorites', [FavoritesController::class, 'destroy']);
     Route::delete('/replies/{reply}', [RepliesController::class, 'destroy']);
@@ -47,6 +50,24 @@ Route::get('/threads/{channel}/{thread}', [ThreadsController::class, 'show']);
 Route::get('/threads/{channel}', [ThreadsController::class, 'index']);
 Route::get('/profiles/{user}', [ProfilesController::class, 'show'])->name('profile');
 Route::get('/api/users', [UserController::class, 'index'])->name('user.index');
+
+Route::get('/email/verify', function () {
+    return view('auth.verify');
+})->middleware('auth')->name('verification.notice');
+
+
+Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
+    $request->fulfill();
+
+    return redirect('/home');
+})->middleware(['auth', 'signed'])->name('verification.verify');
+
+
+Route::post('/email/verification-notification', function (Request $request) {
+    $request->user()->sendEmailVerificationNotification();
+
+    return back()->with('message', 'Verification link sent!');
+})->middleware(['auth', 'throttle:6,1'])->name('verification.send');
 
 
 

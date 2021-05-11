@@ -43,6 +43,20 @@ class CreateThreadsTest extends TestCase
     }
 
     /** @test */
+    public function users_should_verify_their_email_to_create_threads()
+    {
+        $thread = make(Thread::class);
+        $user = create(User::class, [
+            'email_verified_at' => null
+        ]);
+
+        $this->signIn($user);
+
+        $this->post('threads', $thread->toArray())
+            ->assertRedirect(route('verification.notice'));
+    }
+
+    /** @test */
     public function a_thread_requires_a_title()
     {
         $this->publishAThread(['title' => null])
