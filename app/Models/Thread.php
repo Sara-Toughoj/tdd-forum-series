@@ -3,14 +3,13 @@
 namespace App\Models;
 
 use App\Events\ThreadReceivedNewReply;
-use App\Notifications\ThreadWasUpdated;
 use App\RecordsActivity;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Thread extends Model
 {
-    use HasFactory, RecordsActivity;
+    use HasFactory, RecordsActivity, RecordsVisits;
 
     protected $fillable = ['body', 'title', 'user_id', 'channel_id', 'replies_count'];
 

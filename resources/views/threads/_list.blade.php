@@ -29,7 +29,10 @@
             <div>
                 {{$thread->body}}
             </div>
-            <hr>
+        </div>
+
+        <div class="card-footer">
+            {{$thread->visits()}} {{Str::plural('visit',$thread->visits())}}
         </div>
     </div>
 @empty
