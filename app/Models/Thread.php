@@ -12,14 +12,18 @@ class Thread extends Model
 {
     use HasFactory, RecordsActivity;
 
-    protected $fillable = ['body', 'title', 'user_id', 'channel_id', 'replies_count'];
+    protected $fillable = ['body', 'title', 'user_id', 'channel_id', 'replies_count', 'slug'];
 
 
     protected $with = ['channel'];
 
     protected $appends = ['isSubscribedTo'];
 
-
+    public function getRouteKeyName()
+    {
+        return 'slug';
+    }
+    
     //-------------------------------------  Boot  -------------------------------------
 
     protected static function boot()
@@ -38,7 +42,7 @@ class Thread extends Model
     //-------------------------------------  Tools  -------------------------------------
     public function path()
     {
-        return "/threads/{$this->channel->slug}/{$this->id}";
+        return "/threads/{$this->channel->slug}/{$this->slug}";
     }
 
     public function addReply($reply)

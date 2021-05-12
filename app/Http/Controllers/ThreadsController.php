@@ -15,6 +15,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Redirector;
+use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 
 class ThreadsController extends Controller
@@ -71,7 +72,8 @@ class ThreadsController extends Controller
             'title' => $request->title,
             'body' => $request->body,
             'user_id' => auth()->id(),
-            'channel_id' => request()->channel_id
+            'channel_id' => request()->channel_id,
+            'slug' => Str::slug($request->title)
         ]);
 
         return redirect($thread->path())
@@ -81,8 +83,9 @@ class ThreadsController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param Thread $thread
      * @param $channel
+     * @param Thread $thread
+     * @param Trending $trending
      * @return Application|Factory|View
      */
     public function show($channel, Thread $thread, Trending $trending)
