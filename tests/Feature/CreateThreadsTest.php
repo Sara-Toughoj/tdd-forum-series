@@ -10,6 +10,7 @@ use App\Models\User;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Str;
 use Tests\TestCase;
 
 class CreateThreadsTest extends TestCase
@@ -80,6 +81,34 @@ class CreateThreadsTest extends TestCase
 
         $this->publishAThread(['channel_id' => 999])
             ->assertSessionHasErrors('channel_id');
+    }
+
+    /** @test */
+    public function a_thread_requires_a_unique_slug()
+    {
+        $this->signIn();
+
+        $thread = create(Thread::class, [
+            'title' => $title = $this->faker->sentence,
+            'slug' => $slug = Str::slug($title),
+        ]);
+
+        sleep(1);
+
+        $this->assertEquals($thread->fresh()->slug, $slug);
+
+        $this->post(route('threads'), $thread->toArray());
+
+        sleep(1);
+
+        $this->assertTrue(Thread::whereSlug("{$slug}-2")->exists());
+
+        $this->post(route('threads'), $thread->toArray());
+
+
+        $this->assertTrue(Thread::whereSlug("{$slug}-3")->exists());
+
+
     }
 
     /** @test */
