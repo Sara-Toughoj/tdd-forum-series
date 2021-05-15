@@ -90,24 +90,30 @@ class CreateThreadsTest extends TestCase
 
         $thread = create(Thread::class, [
             'title' => $title = $this->faker->sentence,
-            'slug' => $slug = Str::slug($title),
         ]);
 
-        sleep(1);
+        $this->assertEquals($thread->fresh()->slug, $slug = Str::slug($title));
 
-        $this->assertEquals($thread->fresh()->slug, $slug);
+        $response = ($this->postJson(route('threads'), $thread->toArray()))->json();
 
-        $this->post(route('threads'), $thread->toArray());
+        $this->assertTrue(Thread::whereSlug("{$slug}-{$response['id']}")->exists());
 
-        sleep(1);
+    }
 
-        $this->assertTrue(Thread::whereSlug("{$slug}-2")->exists());
+    /** @test */
+    public function a_thread_with_a_title_that_ends_with_a_number_should_generate_the_proper_slug()
+    {
+        $this->signIn();
 
-        $this->post(route('threads'), $thread->toArray());
+        $thread = create(Thread::class, [
+            'title' => $title = $this->faker->sentence . '-' . $this->faker->randomNumber(2),
+        ]);
+
+        $response = ($this->postJson(route('threads'), $thread->toArray()))->json();
 
 
-        $this->assertTrue(Thread::whereSlug("{$slug}-3")->exists());
-
+        $slug = Str::slug($title);
+        $this->assertTrue(Thread::whereSlug("{$slug}-{$response['id']}")->exists());
 
     }
 
