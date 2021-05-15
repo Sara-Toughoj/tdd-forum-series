@@ -146,4 +146,15 @@ class ThreadTest extends TestCase
 
         $this->assertEquals(2, $thread->visits()->count());
     }
+
+    /** @test */
+    public function a_thread_can_set_its_own_best_reply()
+    {
+        $thread = Thread::factory()->hasReplies(5)->create();
+        $best_reply = $thread->replies[3];
+
+        $thread->setBestReply($best_reply);
+
+        $this->assertEquals($thread->best_reply_id, $best_reply->id);
+    }
 }

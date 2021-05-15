@@ -61,11 +61,15 @@ class Reply extends Model
         return $matches[1];
     }
 
+    public function isBest()
+    {
+        return $this->thread->best_reply_id == $this->id;
+    }
+
     //-------------------------- Accessors and Mutators --------------------------
 
     public function setBodyAttribute($body)
     {
         $this->attributes['body'] = preg_replace('/@([\w\-]+)/', '<a href="/profiles/$1">$0</a>', $body);
     }
-
 }

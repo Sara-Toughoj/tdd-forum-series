@@ -13,7 +13,7 @@ class Thread extends Model
 {
     use HasFactory, RecordsActivity;
 
-    protected $fillable = ['body', 'title', 'user_id', 'channel_id', 'replies_count', 'slug'];
+    protected $fillable = ['body', 'title', 'user_id', 'channel_id', 'replies_count', 'slug', 'best_reply_id'];
 
 
     protected $with = ['channel'];
@@ -115,6 +115,11 @@ class Thread extends Model
         }
 
         $this->attributes['slug'] = $slug;
+    }
+
+    public function setBestReply(Reply $reply)
+    {
+        $this->update(['best_reply_id' => $reply->id]);
     }
 
     //-------------------------------------  Relationships  -------------------------------------
