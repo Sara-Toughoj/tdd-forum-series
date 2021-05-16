@@ -1,6 +1,6 @@
 <template>
     <div class="card mt-3" :id="'reply-'+ id">
-        <div class="card-header">
+        <div class="card-header" :class="{'bg-success':isBest}">
             <div class="level">
                 <h5 class="flex">
                     <a :href="'/profiles/' + data.owner.name"
@@ -19,16 +19,20 @@
                     <div class="form-group">
                         <textarea class="form-control mb-2" v-model="body" required></textarea>
                         <button class="btn btn-primary"> Update</button>
-                        <button class="btn btn-link" @click="editing=false" type="button"> Cancel</button>
+                        <button class="btn btn-link" @click="editing=false" type="button"> Cancel
+                        </button>
                     </div>
                 </form>
             </div>
             <div v-else v-html="body"></div>
         </div>
 
-        <div class="card-footer level" v-if="canUpdate">
-            <button class="btn btn-primary mr-3" @click="editing=true"> Edit</button>
-            <button class="btn btn-danger " @click="destroy"> Delete</button>
+        <div class="card-footer level">
+            <div v-if="canUpdate">
+                <button class="btn btn-primary mr-3" @click="editing=true"> Edit</button>
+                <button class="btn btn-danger " @click="destroy"> Delete</button>
+            </div>
+            <button v-show="!isBest" class="btn btn-secondary ml-auto" @click="markBestReply"> Best Reply?</button>
         </div>
     </div>
 </template>
@@ -46,7 +50,8 @@
             return {
                 editing: false,
                 id: null,
-                body: ''
+                body: '',
+                isBest: false,
             }
         },
 
@@ -94,6 +99,13 @@
                     .then(() => {
                         this.$emit('deleted', this.data.id);
                     });
+            },
+
+            markBestReply() {
+                axios.post(`/replies/${this.data.id}/best`).then(() => {
+                    this.isBest = true;
+                    flash('Marked as best');
+                })
             }
         }
 
