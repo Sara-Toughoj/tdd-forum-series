@@ -39,12 +39,6 @@
             }
         },
 
-        computed: {
-            signedIn() {
-                return window.App.signedIn;
-            }
-        },
-
         mounted() {
             let tribute = new Tribute({
                 // column to search against in the object (accepts function or string)
