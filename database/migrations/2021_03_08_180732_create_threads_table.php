@@ -20,7 +20,7 @@ class CreateThreadsTable extends Migration
                 ->unique();
             $table->foreignId('user_id');
             $table->foreignId('channel_id');
-            $table->foreignId('best_reply_id')->nullable();
+            $table->foreignId('best_reply_id')->nullable()->constrained('replies')->onDelete('set null');
             $table->unsignedInteger('replies_count')->default(0);
             $table->string('title');
             $table->text('body');

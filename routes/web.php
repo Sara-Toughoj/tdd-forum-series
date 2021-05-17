@@ -39,7 +39,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/replies/{reply}/favorites', [FavoritesController::class, 'store']);
     Route::delete('/replies/{reply}/favorites', [FavoritesController::class, 'destroy']);
     Route::post('/replies/{reply}/best', [BestRepliesController::class, 'store'])->name('best-replies.store');
-    Route::delete('/replies/{reply}', [RepliesController::class, 'destroy']);
+    Route::delete('/replies/{reply}', [RepliesController::class, 'destroy'])->name('replies.destroy');
     Route::patch('/replies/{reply}', [RepliesController::class, 'update']);
     Route::delete('/profiles/{user}/notifications/{notification}', [UserNotificationsController::class, 'destroy'])->name('notifications.delete');
     Route::get('/profiles/{user}/notifications', [UserNotificationsController::class, 'index'])->name('notifications.index');
