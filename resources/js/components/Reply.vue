@@ -51,7 +51,7 @@
                 editing: false,
                 id: null,
                 body: '',
-                isBest: false,
+                isBest: this.data.isBest,
                 reply: this.data,
             }
         },
@@ -63,6 +63,10 @@
         created() {
             this.body = this.data.body
             this.id = this.data.id
+
+            window.events.$on('best-reply-selected', id => {
+                this.isBest = (this.id == id);
+            });
         },
 
         computed: {
@@ -96,7 +100,7 @@
 
             markBestReply() {
                 axios.post(`/replies/${this.data.id}/best`).then(() => {
-                    this.isBest = true;
+                    window.events.$emit('best-reply-selected', this.data.id)
                     flash('Marked as best');
                 })
             }
