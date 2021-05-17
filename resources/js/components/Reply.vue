@@ -3,13 +3,13 @@
         <div class="card-header" :class="{'bg-success':isBest}">
             <div class="level">
                 <h5 class="flex">
-                    <a :href="'/profiles/' + data.owner.name"
-                       v-text="data.owner.name">
+                    <a :href="'/profiles/' + reply.owner.name"
+                       v-text="reply.owner.name">
                     </a>
                     said <span v-text="ago"> </span>
                 </h5>
                 <div v-if="signedIn">
-                    <favorite :reply="data"></favorite>
+                    <favorite :reply="reply"></favorite>
                 </div>
             </div>
         </div>
@@ -27,12 +27,14 @@
             <div v-else v-html="body"></div>
         </div>
 
-        <div class="card-footer level">
-            <div v-if="authorize('UpdateReply' , reply)">
+        <div class="card-footer level" v-if="authorize('owns' , reply.thread) || authorize('owns' , reply)">
+            <div v-if="authorize('owns' , reply)">
                 <button class="btn btn-primary mr-3" @click="editing=true"> Edit</button>
                 <button class="btn btn-danger " @click="destroy"> Delete</button>
             </div>
-            <button v-show="!isBest" class="btn btn-secondary ml-auto" @click="markBestReply"> Best Reply?</button>
+            <button v-if="authorize('owns' , reply.thread)" v-show="!isBest" class="btn btn-secondary ml-auto" @click="markBestReply">
+                Best Reply?
+            </button>
         </div>
     </div>
 </template>
@@ -49,20 +51,18 @@
         data() {
             return {
                 editing: false,
-                id: null,
+                id: this.reply.id,
                 body: '',
-                isBest: this.data.isBest,
-                reply: this.data,
+                isBest: this.reply.isBest,
             }
         },
 
         props: [
-            "data"
+            "reply"
         ],
 
         created() {
-            this.body = this.data.body
-            this.id = this.data.id
+            this.body = this.reply.body
 
             window.events.$on('best-reply-selected', id => {
                 this.isBest = (this.id == id);
@@ -71,13 +71,13 @@
 
         computed: {
             ago() {
-                return moment(this.data.created_at).fromNow() + '...';
+                return moment(this.reply.created_at).fromNow() + '...';
             }
         },
 
         methods: {
             update() {
-                axios.patch("/replies/" + this.data.id, {
+                axios.patch("/replies/" + this.id, {
                     body: this.body
                 }).then(() => {
                     this.editing = false
@@ -92,15 +92,15 @@
             },
 
             destroy() {
-                axios.delete("/replies/" + this.data.id)
+                axios.delete("/replies/" + this.id)
                     .then(() => {
-                        this.$emit('deleted', this.data.id);
+                        this.$emit('deleted', this.id);
                     });
             },
 
             markBestReply() {
-                axios.post(`/replies/${this.data.id}/best`).then(() => {
-                    window.events.$emit('best-reply-selected', this.data.id)
+                axios.post(`/replies/${this.id}/best`).then(() => {
+                    window.events.$emit('best-reply-selected', this.id)
                     flash('Marked as best');
                 })
             }
