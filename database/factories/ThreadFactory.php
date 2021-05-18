@@ -30,7 +30,8 @@ class ThreadFactory extends Factory
             'channel_id' => Channel::factory(),
             'title' => $title,
             'body' => $this->faker->paragraph,
-            'slug' => Str::slug($title)
+            'slug' => Str::slug($title),
+            'locked' => false
         ];
     }
 }

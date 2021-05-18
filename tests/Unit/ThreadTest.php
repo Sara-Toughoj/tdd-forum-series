@@ -157,4 +157,17 @@ class ThreadTest extends TestCase
 
         $this->assertEquals($thread->best_reply_id, $best_reply->id);
     }
+
+    /** @test */
+    public function a_thread_may_be_locked()
+    {
+        $thread = create(Thread::class);
+
+        $this->assertFalse($thread->locked);
+
+        $thread->lock();
+
+        $this->assertTrue($thread->locked);
+
+    }
 }
