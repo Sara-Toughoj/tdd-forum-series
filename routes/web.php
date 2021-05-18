@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\BestRepliesController;
 use App\Http\Controllers\FavoritesController;
+use App\Http\Controllers\LockedThreadsController;
 use App\Http\Controllers\ProfilesController;
 use App\Http\Controllers\RepliesController;
 use App\Http\Controllers\SubscriptionsController;
@@ -44,6 +45,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profiles/{user}/notifications/{notification}', [UserNotificationsController::class, 'destroy'])->name('notifications.delete');
     Route::get('/profiles/{user}/notifications', [UserNotificationsController::class, 'index'])->name('notifications.index');
     Route::post('/api/users/{user}/avatar', [UserAvatarController::class, 'store'])->name('avatar');
+    Route::post('/locked-threads/{thread}', [LockedThreadsController::class, 'store'])->name('locked-threads.store')->middleware('admin');
 });
 
 Route::get('/', [ThreadsController::class, 'index']);

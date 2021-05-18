@@ -46,6 +46,11 @@ class User extends Authenticatable implements MustVerifyEmail
         'email_verified_at' => 'datetime',
     ];
 
+    const ADMINS = [
+        'JohnDoe',
+        'JaneDoe',
+    ];
+
     public function getRouteKeyName()
     {
         return 'name';
@@ -90,5 +95,10 @@ class User extends Authenticatable implements MustVerifyEmail
     public function getAvatarAttribute()
     {
         return asset($this->avatar_path ? 'storage/' . $this->avatar_path : 'storage/avatars/default.png');
+    }
+
+    public function isAdmin()
+    {
+        return in_array($this->name, self::ADMINS);
     }
 }

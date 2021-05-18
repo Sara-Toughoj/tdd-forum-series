@@ -119,18 +119,6 @@ class ThreadsController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
-     *
-     * @param Request $request
-     * @param Thread $thread
-     * @return Response
-     */
-    public function update(Request $request, Thread $thread)
-    {
-        //
-    }
-
-    /**
      * Remove the specified resource from storage.
      *
      * @param Thread $thread
