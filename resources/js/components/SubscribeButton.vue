@@ -1,5 +1,5 @@
 <template>
-    <button class="btn  btn-light btn-outline-primary mt-4" @click="subscribe"> {{label}}</button>
+    <button class="btn  btn-light btn-outline-primary" @click="subscribe"> {{label}}</button>
 </template>
 
 <script>

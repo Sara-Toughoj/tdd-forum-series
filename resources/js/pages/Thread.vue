@@ -7,14 +7,18 @@
     import SubscribeButton from "../components/SubscribeButton";
 
     export default {
-        props: ['InitialRepliesCount'],
+        props: [
+            'dataRepliesCount',
+            'dataLocked',
+        ],
 
         components: {
             Replies, SubscribeButton
         },
         data() {
             return {
-                repliesCount: this.InitialRepliesCount
+                repliesCount: this.dataRepliesCount,
+                locked: this.dataLocked,
             }
         }
     }
