@@ -8,8 +8,7 @@
 
     export default {
         props: [
-            'dataRepliesCount',
-            'dataLocked',
+            'thread'
         ],
 
         components: {
@@ -17,8 +16,18 @@
         },
         data() {
             return {
-                repliesCount: this.dataRepliesCount,
-                locked: this.dataLocked,
+                repliesCount: this.thread.replies_count,
+                locked: this.thread.locked,
+                slug: this.thread.slug,
+            }
+        },
+
+        methods: {
+            toggleLock() {
+                axios[this.locked ? 'delete' : 'post'](`/locked-threads/${this.slug}`).then(() => {
+                    this.locked = !this.locked;
+                    flash('Lock Toggled successfully');
+                });
             }
         }
     }

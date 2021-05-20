@@ -39,8 +39,21 @@ class LockThreadsTest extends TestCase
             ->assertStatus(200);
 
         $this->assertTrue($thread->fresh()->locked, 'Failed asserting that the thread is locked');
+    }
 
+    /** @test */
+    public function admins_can_unlock_a_thread()
+    {
+        $admin = User::factory()->admin()->create();
 
+        $thread = create(Thread::class, ['locked' => true]);
+
+        $this->signIn($admin);
+
+        $this->delete(route('locked-threads.destroy', $thread))
+            ->assertStatus(200);
+
+        $this->assertFalse($thread->fresh()->locked, 'Failed asserting that the thread is unlocked');
     }
 
     /** @test */
@@ -49,8 +62,7 @@ class LockThreadsTest extends TestCase
         $this->withExceptionHandling();
 
         $this->signIn();
-        $thread = create(Thread::class);
-        $thread->lock();
+        $thread = create(Thread::class, ['locked' => true]);
 
         $this->postJson($thread->path() . '/replies', [
             'body' => $this->faker->sentence,

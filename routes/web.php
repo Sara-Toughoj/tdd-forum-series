@@ -46,6 +46,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/profiles/{user}/notifications', [UserNotificationsController::class, 'index'])->name('notifications.index');
     Route::post('/api/users/{user}/avatar', [UserAvatarController::class, 'store'])->name('avatar');
     Route::post('/locked-threads/{thread}', [LockedThreadsController::class, 'store'])->name('locked-threads.store')->middleware('admin');
+    Route::delete('/locked-threads/{thread}', [LockedThreadsController::class, 'destroy'])->name('locked-threads.destroy')->middleware('admin');
 });
 
 Route::get('/', [ThreadsController::class, 'index']);
