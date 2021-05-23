@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Filters\ThreadFilters;
 use App\Models\Channel;
 use App\Models\Thread;
+use App\Rules\Recaptcha;
 use App\Rules\SpamFree;
 use App\Trending;
 use Illuminate\Contracts\Foundation\Application;
@@ -15,8 +16,6 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Redirector;
-use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 
 class ThreadsController extends Controller
@@ -57,27 +56,20 @@ class ThreadsController extends Controller
      * Store a newly created resource in storage.
      *
      * @param Request $request
+     * @param Recaptcha $recaptcha
      * @return Application|RedirectResponse|Redirector
      * @throws ValidationException
      */
-    public function store(Request $request)
+    public function store(Request $request, Recaptcha $recaptcha)
     {
 
         $this->validate($request, [
             'title' => ['required', new SpamFree()],
             'body' => ['required', new SpamFree()],
-            'channel_id' => 'required|exists:' . (new Channel())->getTable() . ',id'
-        ]);
+            'channel_id' => 'required|exists:' . (new Channel())->getTable() . ',id',
+            'g-recaptcha-response' => ['required', $recaptcha]
 
-        $response = Http::asForm()->post('https://www.google.com/recaptcha/api/siteverify', [
-            'secret' => config('services.recaptcha.secret'),
-            'response' => request('g-recaptcha-response'),
-            'remoteip' => $_SERVER['REMOTE_ADDR'],
         ]);
-
-        if (!$response->json()['success']) {
-            throw new \Exception('Recaptcha failed');
-        }
 
         $thread = Thread::create([
             'title' => request('title'),
