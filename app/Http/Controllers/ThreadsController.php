@@ -68,7 +68,6 @@ class ThreadsController extends Controller
             'body' => ['required', new SpamFree()],
             'channel_id' => 'required|exists:' . (new Channel())->getTable() . ',id',
             'g-recaptcha-response' => ['required', $recaptcha]
-
         ]);
 
         $thread = Thread::create([
@@ -110,15 +109,16 @@ class ThreadsController extends Controller
         ]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param Thread $thread
-     * @return Response
-     */
-    public function edit(Thread $thread)
+
+    public function update($channel, Thread $thread)
     {
-        //
+        $this->authorize('update', $thread);
+
+        $thread->update(request()->validate([
+            'title' => ['required', new SpamFree()],
+            'body' => ['required', new SpamFree()],
+        ]));
+        return $thread;
     }
 
     /**

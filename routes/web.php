@@ -35,6 +35,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/threads/{channel}/{thread}/subscriptions', [SubscriptionsController::class, 'store'])->name('subscriptions.store');
     Route::delete('/threads/{channel}/{thread}/subscriptions', [SubscriptionsController::class, 'delete'])->name('subscriptions.delete');
     Route::delete('/threads/{channel}/{thread}', [ThreadsController::class, 'destroy']);
+    Route::patch('/threads/{channel}/{thread}', [ThreadsController::class, 'update']);
     Route::resource('/threads', ThreadsController::class)->except('index', 'show', 'delete');
     Route::post('/threads', [ThreadsController::class, 'store'])->name('threads')->middleware(['verified']);
     Route::post('/replies/{reply}/favorites', [FavoritesController::class, 'store']);
