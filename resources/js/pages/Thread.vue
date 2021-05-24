@@ -19,6 +19,7 @@
                 repliesCount: this.thread.replies_count,
                 locked: this.thread.locked,
                 slug: this.thread.slug,
+                editing: false,
             }
         },
 
@@ -28,6 +29,10 @@
                     this.locked = !this.locked;
                     flash('Lock Toggled successfully');
                 });
+            },
+
+            update(){
+
             }
         }
     }

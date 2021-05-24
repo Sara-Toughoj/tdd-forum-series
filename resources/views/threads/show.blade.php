@@ -8,30 +8,8 @@
     <thread-view :data-replies-count="{{$thread->replies_count}}" data-locked="{{$thread->locked}}" data-slug="{{$thread->slug}}" :thread="{{$thread}}" inline-template>
         <div class="container">
             <div class="row">
-                <div class="col-md-8">
-                    <div class="card">
-                        <div class="card-header level">
-                            <img src="{{$thread->creator->avatar}}" alt="{{$thread->creator->name}}" width="25" height="25" class="mr-2">
-                            <span class="flex">
-                            <a href="{{route('profile',$thread->creator)}}"> {{$thread->creator->name}}</a>
-                            posted:
-                            {{$thread->title}}
-                        </span>
-                            @can('update' , $thread)
-                                <form method="post" action="{{$thread->path()}}">
-                                    @csrf
-                                    @method('delete')
-                                    <button class="btn btn-link" type="submit"> Delete Thread</button>
-                                </form>
-                            @endcan
-                        </div>
-
-                        <div class="card-body">
-                            <article>
-                                {{$thread->body}}
-                            </article>
-                        </div>
-                    </div>
+                <div class="col-md-8" v-cloak>
+                    @include('threads._question')
 
                     <replies @removed="repliesCount--" @added="repliesCount++"></replies>
 
