@@ -5,7 +5,7 @@
 @endsection
 
 @section('content')
-    <thread-view :data-replies-count="{{$thread->replies_count}}" data-locked="{{$thread->locked}}" data-slug="{{$thread->slug}}" :thread="{{$thread}}" inline-template>
+    <thread-view :data-thread="{{$thread}}" url="{{$thread->path()}}" inline-template>
         <div class="container">
             <div class="row">
                 <div class="col-md-8" v-cloak>

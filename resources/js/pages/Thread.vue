@@ -8,7 +8,7 @@
 
     export default {
         props: [
-            'thread'
+            'dataThread', 'url'
         ],
 
         components: {
@@ -16,11 +16,17 @@
         },
         data() {
             return {
-                repliesCount: this.thread.replies_count,
-                locked: this.thread.locked,
-                slug: this.thread.slug,
+                thread: this.dataThread,
+                repliesCount: this.dataThread.replies_count,
+                locked: this.dataThread.locked,
+                slug: this.dataThread.slug,
                 editing: false,
+                form: {}
             }
+        },
+
+        created() {
+            this.resetForm();
         },
 
         methods: {
@@ -31,7 +37,20 @@
                 });
             },
 
-            update(){
+            update() {
+                axios.patch(this.url, this.form).then((data) => {
+                    this.editing = false;
+                    this.thread = data.data;
+                    flash('Updated successfully');
+                });
+            },
+
+            resetForm() {
+                this.form = {
+                    body: this.dataThread.body,
+                    title: this.dataThread.title,
+                }
+                this.editing = false;
 
             }
         }

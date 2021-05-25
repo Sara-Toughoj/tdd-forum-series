@@ -1,27 +1,27 @@
 {{-- Editing The Question --}}
 <div class="card" v-if="editing">
     <div class="card-header level">
-        <input class="form-control" type="text" value="{{$thread->title}}">
+        <input class="form-control" type="text" v-model="form.title">
     </div>
 
     <div class="card-body">
         <div class="form-group">
-            <textarea class="form-control" rows="10">{{$thread->body}}</textarea>
+            <textarea class="form-control" rows="10" v-model="form.body"></textarea>
         </div>
     </div>
 
-    <div class="card-footer level">
-        <button class="btn btn-primary btn-sm" v-if="!editing" @click="editing = true"> Edit</button>
-        <button class="btn btn-primary btn-sm" v-if="editing" @click="update"> Save </button>
-        <button class="btn btn-primary btn-sm ml-3" @click="editing = false"> Cancel</button>
-        @can('update' , $thread)
+    @can('update' , $thread)
+        <div class="card-footer level">
+            <button class="btn btn-primary btn-sm" v-if="!editing" @click="editing = true"> Edit</button>
+            <button class="btn btn-primary btn-sm" v-if="editing" @click="update"> Save</button>
+            <button class="btn btn-primary btn-sm ml-3" @click="resetForm"> Cancel</button>
             <form method="post" action="{{$thread->path()}}" class="ml-auto">
                 @csrf
                 @method('delete')
                 <button class="btn btn-link" type="submit"> Delete Thread</button>
             </form>
-        @endcan
-    </div>
+        </div>
+    @endcan
 
 </div>
 
@@ -33,17 +33,19 @@
         <span class="flex">
             <a href="{{route('profile',$thread->creator)}}"> {{$thread->creator->name}}</a>
             posted:
-            {{$thread->title}}
+            <span v-html="thread.title"></span>
         </span>
     </div>
 
     <div class="card-body">
-        <article>
-            {{$thread->body}}
+        <article v-html="thread.body">
         </article>
     </div>
 
-    <div class="card-footer">
-        <button class="btn btn-primary btn-sm" @click="editing = true"> Edit</button>
-    </div>
+    @can('update' , $thread)
+        <div class="card-footer">
+            <button class="btn btn-primary btn-sm" @click="editing = true"> Edit</button>
+        </div>
+    @endcan
+    
 </div>
