@@ -17,7 +17,7 @@
             <div v-if="editing">
                 <form @submit.prevent="update">
                     <div class="form-group">
-                        <textarea class="form-control mb-2" v-model="body" required></textarea>
+                        <fancy-editor class="mb-2" v-model="body" :value="body" required></fancy-editor>
                         <button class="btn btn-primary"> Update</button>
                         <button class="btn btn-link" @click="editing=false" type="button"> Cancel
                         </button>
@@ -51,7 +51,7 @@
         data() {
             return {
                 editing: false,
-                id: this.reply.id   ,
+                id: this.reply.id,
                 body: '',
                 isBest: this.reply.isBest,
             }

@@ -3,14 +3,11 @@
 
         <div v-if="signedIn">
             <div class="form-group mt-3">
-            <textarea v-model="body"
-                      required
-                      name="body"
-                      id="body"
-                      class="form-control"
-                      placeholder="Have something to say ?"
-                      rows="5">
-            </textarea>
+                <fancy-editor v-model="body"
+                              name="body"
+                              placeholder="Have something to say ?"
+                              :shouldClear="completed">
+                </fancy-editor>
             </div>
 
             <button type="submit"
@@ -36,6 +33,7 @@
         data() {
             return {
                 body: '',
+                completed: false,
             }
         },
 
@@ -61,6 +59,7 @@
                     body: this.body
                 }).then(data => {
                     this.body = '';
+                    this.completed = true;
                     flash('Your reply has been posted.');
                     this.$emit('created', data.data);
                 }).catch((error) => {
