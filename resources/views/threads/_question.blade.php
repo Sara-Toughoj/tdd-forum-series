@@ -6,7 +6,7 @@
 
     <div class="card-body">
         <div class="form-group">
-            <textarea class="form-control" rows="10" v-model="form.body"></textarea>
+            <fancy-editor v-model="form.body" value="form.body"></fancy-editor>
         </div>
     </div>
 
@@ -47,5 +47,5 @@
             <button class="btn btn-primary btn-sm" @click="editing = true"> Edit</button>
         </div>
     @endcan
-    
+
 </div>

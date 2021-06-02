@@ -32,7 +32,7 @@
 
                             <div class="form-group">
                                 <label for="body"> Body : </label>
-                                <textarea name="body" class="form-control" id="body" placeholder="what do you have in mind" rows="8" required>{{old('body')}}</textarea>
+                                <fancy-editor name="body"></fancy-editor>
                             </div>
 
                             <div class="g-recaptcha mb-3" data-sitekey="{{ env('RECAPTCHA_SITE_KEY') }}"></div>

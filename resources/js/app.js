@@ -39,6 +39,7 @@ Vue.component('paginator', require('./components/Paginator').default);
 Vue.component('user-notifications', require('./components/UserNotifications').default);
 Vue.component('thread-view', require('./pages/Thread').default);
 Vue.component('avatar-form', require('./components/AvatarForm').default);
+Vue.component('fancy-editor', require('./components/FancyEditor').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
