@@ -158,4 +158,11 @@ class ThreadTest extends TestCase
         $this->assertEquals($thread->best_reply_id, $best_reply->id);
     }
 
+    /** @test */
+    public function a_threads_body_is_sanitized_automatically()
+    {
+        $thread = make(Thread::class, ['body' => '<script>alert("bad")</script><p>This is Okay</p>']);
+        $this->assertEquals('<p>This is Okay</p>', $thread->body);
+    }
+
 }
